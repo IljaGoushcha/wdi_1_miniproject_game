@@ -1,3 +1,5 @@
+require 'pry'
+
 class Warrior
   attr_accessor :name, :health, :endurance, :armor, :jab_damage, :cross_damage, :hook_damage, :uppercut_damage, :kick_damage
   def initialize(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage)
@@ -30,23 +32,30 @@ class Warrior
 end
 
 class Knight < Warrior
-  def initialize(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage)
-    super(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage, axe_damage)
+  attr_accessor :axe_damage
+  def initialize(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage, axe_damage)
+    super(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage)
     @axe_damage = axe_damage
   end
-
   def axe_hit
     @health = @health - axe_damage
   end
 end
 
 class Viking < Warrior
-  def initialize(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage)
-    super(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage, axe_damage)
+  attr_accessor :sword_damage
+  def initialize(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage, sword_damage)
+    super(name, health, endurance, armor, jab_damage, cross_damage, hook_damage, uppercut_damage, kick_damage)
     @sword_damage = sword_damage
   end
-
   def sword_hit
     @health = @health - sword_damage
   end
 end
+
+my_viking = Viking.new("Oleg", 10000, 90, 100, 40, 50, 30, 45, 65, 95)
+puts my_viking.health
+puts my_viking.name
+my_viking.name = "Ilja"
+puts my_viking.name
+# binding.pry
