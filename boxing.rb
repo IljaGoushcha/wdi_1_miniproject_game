@@ -3,7 +3,7 @@
 # and let the simulator run. The user then can see which fighters become victorious.
 
 require 'pry'
-
+#Definition of Class Fighter
 class Fighter
   attr_accessor :name, :health, :stamina, :power, :is_tired, :is_dead, :initial_health
   def initialize(name, health, stamina, power)
@@ -16,6 +16,10 @@ class Fighter
     @initial_health = health
     @initial_power = power
   end
+
+  # Overloading method to_string. It outputs state of an object in a presntable manner
+  # No input arguments required
+  # Output is nil
   def to_string
     puts "*** #{@name} ***"
     puts "health: #{@health * 100 / @initial_health}%"
@@ -24,6 +28,10 @@ class Fighter
     puts @is_tired ? "tired" : "not tired"
     puts @is_dead ? "dead" : "alive"
   end
+
+  # Visualizing health level of a fighter
+  # No input arguments
+  # Output is nil
   def visualize
     health_level = @health * 100 / @initial_health
     stars = "*" * health_level
@@ -34,6 +42,9 @@ class Fighter
   end
 end
 
+# This method instantiates a a fighter.
+# Input arguments are: string, integer, string
+# Output is an object of class Fighter
 def generate_fighter(name, initial_health, type)
   if type == "Runner"
     Fighter.new(name, initial_health, rand(200..300), rand(20..50))
@@ -44,14 +55,22 @@ def generate_fighter(name, initial_health, type)
   end
 end
 
+# This method generates many fighter pairs
+# Input is: integer, integer
+# Output is an Array where lements are Hashes
 def generate_fighters(number, initial_health)
   fighters = []
   for i in 1..number
-    fighters << {runner: generate_fighter("runner #{i}", initial_health, "Runner"), viking: generate_fighter("viking #{i}", initial_health, "Viking")}
+    number = "%.2i" %i
+    fighters << {runner: generate_fighter("runner " + number, initial_health, "Runner"), viking: generate_fighter("viking " + number, initial_health, "Viking")}
   end
   return fighters
 end
 
+# This method simulates a short period of boxing, with fighters exchanging hits once.
+# The method changes state of fighters, it reduces their health, makes them tired, or dead.
+# Input is: object of class Fighter, object of class Fighter, integer
+# Output is a Hash with two elements, both of type Fighter
 def attack(offender, defender, fight_time)
   if defender.health > 0 && offender.is_dead == false
     defender.health = defender.health - offender.power
@@ -71,6 +90,11 @@ def attack(offender, defender, fight_time)
   fighters = {offender: offender, defende: defender}
 end
 
+# This is essentially a main method. This methid controls the fight.
+# The method keeps track of time, and organizes boxers in fighting pairs.
+# This method ensures fighters fight one on one and take turn, so the fight is highly structued.
+# Input: integer, integer (starting health level of the fighters, and how many fighting pairs we want to see)
+# Output: Array of cashes, whcih consists of two objects of Class Fighter
 def battle(initial_health, number_of_fighting_pairs)
   fighters = generate_fighters(number_of_fighting_pairs, initial_health)
 
@@ -79,6 +103,7 @@ def battle(initial_health, number_of_fighting_pairs)
     my_viking = fighting_pair[:viking]
     my_runner.visualize
     my_viking.visualize
+    puts ""
   end
   gets
   key = "start"
@@ -91,18 +116,25 @@ def battle(initial_health, number_of_fighting_pairs)
       attack(my_viking, my_runner, timer)
       {runner: my_runner, viking: my_viking}
     end
+
     fighters.map do |fighting_pair|
       my_runner = fighting_pair[:runner]
       my_viking = fighting_pair[:viking]
       my_runner.visualize
       my_viking.visualize
+      puts ""
     end
+    puts ""
+    puts ""
     key = gets.chomp.to_s
     timer += 1
   end
   return fighters
 end
 
+# This method simply illustrates some statistics after the fight
+# Input: Array of Hashes with objects of class Fighter
+# Output: nil
 def battle_statistics(fighters)
   number_runners_alive = 0
   number_vikings_alive = 0
