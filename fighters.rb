@@ -1,4 +1,6 @@
-# puts generate_fighters(10)[:runners][3].to_string  hang@generalassemb.ly or ga.co
+# This is an example of game chracters classes, which inherit from one another.
+# This is not a game, merely a demonstration, that I understand inheritance.
+# For functional game, look at boxing.rb
 require 'pry'
 
 class Warrior
