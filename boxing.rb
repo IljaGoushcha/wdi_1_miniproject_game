@@ -67,40 +67,31 @@ def attack(offender, defender, fight_time)
   fighters = {offender: offender, defende: defender}
 end
 
+def battle(initial_health, number_of_fighting_pairs)
+  fighters = generate_fighters(number_of_fighting_pairs, initial_health)
+  puts "START FIGHT!!!!"
 
-initial_health = 5000
-fighters = generate_fighters(2, initial_health)
-puts "START FIGHT!!!!"
-
-key = "start"
-timer = 0
-while key != "end"
-  fighters.map! do |fighting_pair|
-    my_runner = fighting_pair[:runner]
-    my_viking = fighting_pair[:viking]
-    attack(my_runner, my_viking, timer)
-    attack(my_viking, my_runner, timer)
-    {runner: my_runner, viking: my_viking}
+  key = "start"
+  timer = 0
+  while key != "end"
+    fighters.map! do |fighting_pair|
+      my_runner = fighting_pair[:runner]
+      my_viking = fighting_pair[:viking]
+      attack(my_runner, my_viking, timer)
+      attack(my_viking, my_runner, timer)
+      {runner: my_runner, viking: my_viking}
+    end
+    fighters.map do |fighting_pair|
+      my_runner = fighting_pair[:runner]
+      my_viking = fighting_pair[:viking]
+      my_runner.visualize
+      my_viking.visualize
+    end
+    key = gets.chomp.to_s
+    timer += 1
   end
-  fighters.map do |fighting_pair|
-    my_runner = fighting_pair[:runner]
-    my_viking = fighting_pair[:viking]
-    my_runner.visualize
-    my_viking.visualize
-  end
-  key = gets.chomp.to_s
-  timer += 1
 end
 
+battle(5000, 10)
 
-# runners = fighters[:runners]
-# vikings = fighters[:vikings]
 
-# runner = runners[1]
-# viking = vikings[1]
-
-# initial_health = 5000
-# runner = generate_fighter("runner", initial_health, "Runner")
-# viking = generate_fighter("viking", initial_health, "Viking")
-# runner.to_string
-# viking.to_string

@@ -1,3 +1,4 @@
+# puts generate_fighters(10)[:runners][3].to_string  hang@generalassemb.ly or ga.co
 require 'pry'
 
 class Warrior
