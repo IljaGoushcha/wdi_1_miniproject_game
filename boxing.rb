@@ -2,7 +2,7 @@ require 'pry'
 # puts generate_fighters(10)[:runners][3].to_string  hang@generalassemb.ly or ga.co
 
 class Runner
-  attr_accessor :name, :health, :stamina, :power, :is_tired, :is_dead
+  attr_accessor :name, :health, :stamina, :power, :is_tired, :is_dead, :initial_health
   def initialize(name, health, stamina, power)
     @name = name
     @health = health
@@ -10,6 +10,7 @@ class Runner
     @power = power
     @is_tired = false
     @is_dead = false
+    @initial_health = health
   end
   def to_string
     puts "Runner: " + @name
@@ -27,10 +28,26 @@ class Runner
       puts "alive"
     end
   end
+  def visualize
+    health_level = @health * 100 / @initial_health
+    stars = "*" * health_level
+    spaces = " " * (100 - stars.length)
+    if @is_tired == true
+      tired_or_not = "tired"
+    else
+      tired_or_not = "not_tired"
+    end
+    if @is_dead == true
+      dead_or_alive = "dead"
+    else
+      dead_or_alive = "alive"
+    end
+    puts "Runner #{@name} #{stars}#{spaces} #{tired_or_not} #{dead_or_alive}"
+  end
 end
 
 class Viking
-  attr_accessor :name, :health, :stamina, :power, :is_tired, :is_dead
+  attr_accessor :name, :health, :stamina, :power, :is_tired, :is_dead, :initial_health
   def initialize(name, health, stamina, power)
     @name = name
     @health = health
@@ -38,6 +55,7 @@ class Viking
     @power = power
     @is_tired = false
     @is_dead = false
+    @initial_health = health
   end
   def to_string
     puts "Viking: " + @name
@@ -54,6 +72,22 @@ class Viking
     else
       puts "alive"
     end
+  end
+  def visualize
+    health_level = @health * 100 / @initial_health
+    stars = "*" * health_level
+    spaces = " " * (100 - stars.length)
+    if @is_tired == true
+      tired_or_not = "tired"
+    else
+      tired_or_not = "not_tired"
+    end
+    if @is_dead == true
+      dead_or_alive = "dead"
+    else
+      dead_or_alive = "alive"
+    end
+    puts "Viking #{@name} #{stars}#{spaces} #{tired_or_not} #{dead_or_alive}"
   end
 end
 
@@ -78,6 +112,9 @@ end
 def attack(offender, defender, fight_time)
   if defender.health > 0 && offender.is_dead == false
     defender.health = defender.health - offender.power
+    if defender.health < 0
+      defender.health = 0
+    end
   elsif defender.health > 0 && offender.is_dead == true
   elsif
     defender.is_dead = true
@@ -90,14 +127,12 @@ def attack(offender, defender, fight_time)
   fighters = {offender: offender, defende: defender}
 end
 
-def visualize(fighter, fight_time)
 
-end
 
-oleg = generate_runner("Oleg", 10000)
-ilja = generate_viking("Ilja", 10000)
-oleg.to_string
-ilja.to_string
+initial_health = 5000
+oleg = generate_runner("Oleg", initial_health)
+ilja = generate_viking("Ilja", initial_health)
+
 puts "START FIGHT!!!!"
 
 key = "start"
@@ -105,8 +140,8 @@ timer = 0
 while key != "end" do
   attack(oleg, ilja, timer)
   attack(ilja, oleg, timer)
-  oleg.to_string
-  ilja.to_string
+  oleg.visualize
+  ilja.visualize
   key = gets.chomp.to_s
   timer += 1
 end
